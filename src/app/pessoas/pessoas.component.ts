@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-pessoas',
@@ -19,7 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatButtonModule,
     MatTableModule,
-    MatTooltipModule],
+    MatTooltipModule,  RouterModule],
   templateUrl: './pessoas.component.html',
   styleUrl: './pessoas.component.scss'
 })

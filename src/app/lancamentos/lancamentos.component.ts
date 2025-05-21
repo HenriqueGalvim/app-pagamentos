@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lancamentos',
@@ -25,7 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatButtonModule,
     MatTableModule,
-    MatTooltipModule
+    MatTooltipModule,  RouterModule
   ],
   templateUrl: './lancamentos.component.html',
   styleUrl: './lancamentos.component.scss'
