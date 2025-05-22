@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,7 @@ import { TopbarComponent } from '../shared/components/topbar/topbar.component';
     MatListModule,
     MatButtonModule,
     MatDividerModule,
-    TopbarComponent
+    TopbarComponent, RouterModule
   ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
