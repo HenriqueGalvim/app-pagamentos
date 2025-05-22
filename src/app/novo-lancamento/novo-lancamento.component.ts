@@ -35,12 +35,13 @@ export class LancamentoCadastroComponent {
   categorias = ['Salário', 'Aluguel', 'Transporte'];
   pessoas = ['João', 'Maria', 'Carlos'];
 
-  constructor(private fb: FormBuilder) {
+constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
+      tipo: ['receita', Validators.required],
       vencimento: ['', Validators.required],
       recebimento: [''],
-      descricao: ['', Validators.required],
-      valor: [0, Validators.required],
+      descricao: ['', [Validators.required, Validators.minLength(10)]],
+      valor: [0, [Validators.required, Validators.min(0.01)]],
       categoria: ['', Validators.required],
       pessoa: ['', Validators.required],
       observacao: ['']

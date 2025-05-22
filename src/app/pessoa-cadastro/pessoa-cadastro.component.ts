@@ -22,17 +22,17 @@ import { NgxMaskDirective } from 'ngx-mask';
 export class PessoaCadastroComponent {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      nome: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.minLength(5)]],
       logradouro: ['', Validators.required],
       numero: ['', Validators.required],
       complemento: [''],
       bairro: ['', Validators.required],
       cep: ['', Validators.required],
       cidade: ['', Validators.required],
-      estado: ['', Validators.required]
-    });
+      estado: ['', Validators.required],
+     });
   }
 
   salvar() {
