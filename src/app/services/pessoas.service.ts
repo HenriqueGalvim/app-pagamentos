@@ -10,7 +10,7 @@ import { Pessoa } from '../models/pessoa.model';
 export class PessoasService {
   // JWT hardcoded por enquanto
   private readonly jwtToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzQ5NjgxMjQ2LCJleHAiOjE3NDk2ODQ4NDZ9.HGoP9fAaUXLwgXwDLgQSA9Vd96FsxbSH9XDKVDmw824';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzUwMjczMDQ0LCJleHAiOjE3NTA2MzMwNDR9.9n-2wJOd5hI5n6SJG4A8Omy_hXldtXpm2kWbdQeYt3w';
 
   private readonly apiUrl = 'http://localhost:8080/pessoas'; // ajuste para o seu backend
 
@@ -59,6 +59,12 @@ export class PessoasService {
 
   atualizarStatusAtivo(codigo: number, ativo: boolean): Observable<Pessoa> {
     return this.http.patch<Pessoa>(`${this.apiUrl}/${codigo}/ativo`, ativo, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  buscarPorCodigo(codigo: number): Observable<Pessoa> {
+    return this.http.get<Pessoa>(`${this.apiUrl}/${codigo}`, {
       headers: this.getHeaders(),
     });
   }

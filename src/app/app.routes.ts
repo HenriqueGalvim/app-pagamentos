@@ -17,4 +17,11 @@ export const routes: Routes = [
       { path: 'nova-pessoa', component: PessoaCadastroComponent },
     ],
   },
+  {
+    path: 'pessoas/editar/:codigo',
+    loadComponent: () =>
+      import('./pessoa-cadastro/pessoa-cadastro.component').then(
+        (m) => m.PessoaCadastroComponent
+      ),
+  },
 ];

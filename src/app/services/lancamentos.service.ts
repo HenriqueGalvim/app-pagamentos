@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class LancamentosService {
   // JWT hardcoded por enquanto
-  private readonly jwtToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzQ5NjgxMjQ2LCJleHAiOjE3NDk2ODQ4NDZ9.HGoP9fAaUXLwgXwDLgQSA9Vd96FsxbSH9XDKVDmw824';
+  private readonly jwtToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzUwMjczMDQ0LCJleHAiOjE3NTA2MzMwNDR9.9n-2wJOd5hI5n6SJG4A8Omy_hXldtXpm2kWbdQeYt3w';
 
   private readonly apiUrl = 'http://localhost:8080/lancamentos/resumo'; // ajuste para o seu backend
 
