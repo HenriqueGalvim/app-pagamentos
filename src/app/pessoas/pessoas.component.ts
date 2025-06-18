@@ -14,6 +14,7 @@ import { PessoasTableComponent } from '../pessoas-table/pessoas-table.component'
 import { PessoasService } from '../services/pessoas.service';
 import { PessoaFiltro } from '../models/pessoa-filtro';
 import { Pessoa } from '../models/pessoa.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-pessoas',
@@ -30,6 +31,7 @@ import { Pessoa } from '../models/pessoa.model';
   styleUrl: './pessoas.component.scss'
 })
 export class PessoasComponent {
+  snackBar = inject(MatSnackBar);
   pessoasService = inject(PessoasService);
   filtro = signal<PessoaFiltro>({
     nome: '',
@@ -62,5 +64,25 @@ export class PessoasComponent {
   ngOnInit() {
     this.pesquisar();
   }
+
+  excluirPessoa(codigo: number) {
+  if (confirm('Deseja realmente excluir esta pessoa?')) {
+    this.pessoasService.deletarPessoa(codigo).subscribe({
+      next: () => {
+        this.snackBar.open('Pessoa excluída com sucesso!', '', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
+        this.pesquisar(); // recarrega a lista
+      },
+      error: (e) => {
+        this.snackBar.open(e.error.error, '', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
+  }
+}
 
 }
