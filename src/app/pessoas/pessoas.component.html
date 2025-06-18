@@ -15,7 +15,8 @@
 
 <app-pessoas-table
   [pessoas]="pessoas()"
-  (excluir)="excluirPessoa($event)">
+  (excluir)="excluirPessoa($event)"
+  (alternarStatus)="alterarStatusPessoa($event)">
 </app-pessoas-table>
 
   <!-- Paginação -->

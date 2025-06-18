@@ -20,3 +20,16 @@
     margin-top: 16px;
   }
 }
+.status-badge {
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-badge.ativo {
+  color: green;
+}
+
+.status-badge.desativado {
+  color: red;
+}

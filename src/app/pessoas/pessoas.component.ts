@@ -99,4 +99,30 @@ export class PessoasComponent {
       }
     });
   }
+
+  alterarStatusPessoa(pessoa: any) {
+  const novoStatus = !pessoa.ativo;
+  const dadosAtualizados = { ...pessoa, ativo: novoStatus };
+
+  this.pessoasService.atualizarPessoa(pessoa.codigo, dadosAtualizados).subscribe({
+    next: () => {
+      const msg = novoStatus ? 'Pessoa ativada com sucesso!' : 'Pessoa desativada com sucesso!';
+      this.snackBar.open(msg, '', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-success']
+      });
+      this.pesquisar(); // Atualiza a tabela
+    },
+    error: () => {
+      this.snackBar.open('Erro ao atualizar status da pessoa.', '', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-error']
+      });
+    }
+  });
+}
 }
