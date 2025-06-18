@@ -2,17 +2,14 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LancamentoFiltro } from '../models/lancamento-filtro';
 import { Observable } from 'rxjs';
+import { Lancamento } from '../models/lancamento.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LancamentosService {
-  // JWT hardcoded por enquanto
-  private readonly jwtToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzUwMjczMDQ0LCJleHAiOjE3NTA2MzMwNDR9.9n-2wJOd5hI5n6SJG4A8Omy_hXldtXpm2kWbdQeYt3w';
-
-  private readonly apiUrl = 'http://localhost:8080/lancamentos/resumo'; // ajuste para o seu backend
-
   private http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:8080/lancamentos';
 
   pesquisar(filtro: LancamentoFiltro): Observable<any> {
     let params = new HttpParams();
@@ -33,10 +30,22 @@ export class LancamentosService {
     params = params.set('size', filtro.size);
     params = params.set('sort', filtro.sort || 'dataVencimento,asc');
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.jwtToken}`
-    });
+    return this.http.get<any>(`${this.apiUrl}/resumo`, { params });
+  }
 
-    return this.http.get<any>(this.apiUrl, { params, headers });
+  buscarPorCodigo(codigo: number): Observable<Lancamento> {
+    return this.http.get<Lancamento>(`${this.apiUrl}/${codigo}`);
+  }
+
+  criarLancamento(lancamento: Lancamento): Observable<Lancamento> {
+    return this.http.post<Lancamento>(this.apiUrl, lancamento);
+  }
+
+  atualizarLancamento(codigo: number, lancamento: Lancamento): Observable<Lancamento> {
+    return this.http.put<Lancamento>(`${this.apiUrl}/${codigo}`, lancamento);
+  }
+
+  deletarLancamento(codigo: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${codigo}`);
   }
 }

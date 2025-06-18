@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +11,7 @@ import { LancamentoResumido } from '../models/lancamento-resumido.model';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { Lancamento } from '../models/lancamento.model';
 
 @Component({
   selector: 'app-lancamentos',
@@ -29,8 +30,8 @@ import { MatNativeDateModule } from '@angular/material/core';
   styleUrl: './lancamentos.component.scss'
 })
 export class LancamentosComponent {
+ private service = inject(LancamentosService);
 
-  lancamentosService = inject(LancamentosService);
   filtro = signal<LancamentoFiltro>({
     descricao: '',
     dataVencimentoDe: undefined,
@@ -40,29 +41,39 @@ export class LancamentosComponent {
     sort: 'dataVencimento,asc'
   });
 
-  lancamentos = signal<LancamentoResumido[]>([]);
+  lancamentos = signal<Lancamento[]>([]);
   totalElements = signal(0);
-  paginaAtual = signal(0);
+  paginaAtual = computed(() => this.filtro().page);
 
-
-  pesquisar() {
-    this.lancamentosService.pesquisar(this.filtro()).subscribe({
-      next: dados => {
-        this.lancamentos.set(dados.content);
-        this.totalElements.set(dados.totalElements);
-        this.paginaAtual.set(dados.number);
-      },
-      error: err => console.error('Erro ao carregar lançamentos', err)
+  constructor() {
+    effect(() => {
+      this.pesquisar();
     });
   }
 
+pesquisar() {
+  this.service.pesquisar(this.filtro()).subscribe(response => {
+    this.lancamentos.set(response.content);
+    this.totalElements.set(response.totalElements);
+  });
+}
+
+
   aoMudarPagina(event: PageEvent) {
-    this.filtro().page = event.pageIndex;
-    this.filtro().size = event.pageSize;
+    this.filtro.update(f => ({
+      ...f,
+      page: event.pageIndex,
+      size: event.pageSize
+    }));
     this.pesquisar();
   }
 
-  ngOnInit() {
-    this.pesquisar();
+  excluirLancamento(codigo: number) {
+    if (confirm('Tem certeza que deseja excluir este lançamento?')) {
+      this.service.deletarLancamento(codigo).subscribe(() => {
+        alert('Lançamento excluído com sucesso!');
+        this.pesquisar();
+      });
+    }
   }
 }

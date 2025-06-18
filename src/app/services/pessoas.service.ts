@@ -8,7 +8,7 @@ import { Pessoa } from '../models/pessoa.model';
   providedIn: 'root',
 })
 export class PessoasService {
- private readonly apiUrl = 'http://localhost:8080/pessoas';
+  private readonly apiUrl = 'http://localhost:8080/pessoas';
   private http = inject(HttpClient);
 
   pesquisar(filtro: PessoaFiltro): Observable<any> {
@@ -45,4 +45,12 @@ export class PessoasService {
   buscarPorCodigo(codigo: number): Observable<Pessoa> {
     return this.http.get<Pessoa>(`${this.apiUrl}/${codigo}`);
   }
+
+  listarTodas(): Observable<any> {
+  return this.http.get<any>('http://localhost:8080/pessoas', {
+    params: new HttpParams()
+      .set('page', 0)
+      .set('size', 1000)
+  });
+}
 }

@@ -19,14 +19,20 @@ export const routes: Routes = [
       { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
       { path: 'lancamentos', component: LancamentosComponent },
       { path: 'novo-lancamento', component: LancamentoCadastroComponent },
+      {
+        path: 'lancamentos/editar/:codigo',
+        component: LancamentoCadastroComponent,
+      },
       { path: 'nova-pessoa', component: PessoaCadastroComponent },
       { path: 'pessoas', component: PessoasComponent },
       {
         path: 'pessoas/editar/:codigo',
         loadComponent: () =>
-          import('./pessoa-cadastro/pessoa-cadastro.component').then(m => m.PessoaCadastroComponent)
-      }
-    ]
+          import('./pessoa-cadastro/pessoa-cadastro.component').then(
+            (m) => m.PessoaCadastroComponent
+          ),
+      },
+    ],
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

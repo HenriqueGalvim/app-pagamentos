@@ -29,7 +29,11 @@
     Pesquisar
   </button>
 
-  <app-lancamentos-table [lancamentos]="lancamentos()"></app-lancamentos-table>
+ <app-lancamentos-table
+  [lancamentos]="lancamentos()"
+  (excluir)="excluirLancamento($event)">
+</app-lancamentos-table>
+
 
     <!-- Paginação -->
     <mat-paginator
