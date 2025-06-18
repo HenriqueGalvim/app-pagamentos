@@ -2,18 +2,25 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { PessoaFiltro } from '../models/pessoa-filtro';
 import { Observable } from 'rxjs';
+import { Pessoa } from '../models/pessoa.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PessoasService {
-
   // JWT hardcoded por enquanto
-  private readonly jwtToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzQ1Mjg5NjU0LCJleHAiOjE3NDUyOTMyNTR9.8Bi38k2I4u_DZBqRBgXM3yZCHcSIsvjja402-Me4t-o';
+  private readonly jwtToken =
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB1ZWEuZWR1LmJyIiwiaWF0IjoxNzQ5NjgxMjQ2LCJleHAiOjE3NDk2ODQ4NDZ9.HGoP9fAaUXLwgXwDLgQSA9Vd96FsxbSH9XDKVDmw824';
 
   private readonly apiUrl = 'http://localhost:8080/pessoas'; // ajuste para o seu backend
 
   private http = inject(HttpClient);
+
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.jwtToken}`,
+    });
+  }
 
   pesquisar(filtro: PessoaFiltro): Observable<any> {
     let params = new HttpParams();
@@ -26,10 +33,33 @@ export class PessoasService {
     params = params.set('size', filtro.size);
     params = params.set('sort', filtro.sort || 'nome,asc');
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.jwtToken}`
+    return this.http.get<any>(this.apiUrl, {
+      params,
+      headers: this.getHeaders(),
     });
+  }
 
-    return this.http.get<any>(this.apiUrl, { params, headers });
+  criarPessoa(pessoa: Pessoa): Observable<Pessoa> {
+    return this.http.post<Pessoa>(this.apiUrl, pessoa, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  atualizarPessoa(codigo: number, pessoa: Pessoa): Observable<Pessoa> {
+    return this.http.put<Pessoa>(`${this.apiUrl}/${codigo}`, pessoa, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  deletarPessoa(codigo: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${codigo}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  atualizarStatusAtivo(codigo: number, ativo: boolean): Observable<Pessoa> {
+    return this.http.patch<Pessoa>(`${this.apiUrl}/${codigo}/ativo`, ativo, {
+      headers: this.getHeaders(),
+    });
   }
 }
