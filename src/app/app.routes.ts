@@ -6,10 +6,11 @@ import { LancamentoCadastroComponent } from './novo-lancamento/novo-lancamento.c
 import { PessoaCadastroComponent } from './pessoa-cadastro/pessoa-cadastro.component';
 import { authGuard } from './services/auth.guard';
 import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent }, // rota pública
-
+  { path: 'sair', component: LogoutComponent }, // Rota de logout
   {
     path: '',
     component: LayoutComponent,
