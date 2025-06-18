@@ -15,10 +15,12 @@ import { PessoasService } from '../services/pessoas.service';
 import { PessoaFiltro } from '../models/pessoa-filtro';
 import { Pessoa } from '../models/pessoa.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmacaoDialogComponent } from '../confirmacao-dialog/confirmacao-dialog.component';
 @Component({
   selector: 'app-pessoas',
-  imports: [FormsModule,
+  imports: [
+    FormsModule,
     CommonModule,
     RouterModule,
     MatPaginatorModule,
@@ -26,18 +28,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    PessoasTableComponent],
+    PessoasTableComponent,
+  ],
   templateUrl: './pessoas.component.html',
-  styleUrl: './pessoas.component.scss'
+  styleUrl: './pessoas.component.scss',
 })
 export class PessoasComponent {
+  dialog = inject(MatDialog);
   snackBar = inject(MatSnackBar);
   pessoasService = inject(PessoasService);
   filtro = signal<PessoaFiltro>({
     nome: '',
     page: 0,
     size: 5,
-    sort: 'nome,asc'
+    sort: 'nome,asc',
   });
 
   pessoas = signal<Pessoa[]>([]);
@@ -46,12 +50,12 @@ export class PessoasComponent {
 
   pesquisar() {
     this.pessoasService.pesquisar(this.filtro()).subscribe({
-      next: dados => {
+      next: (dados) => {
         this.pessoas.set(dados.content);
         this.totalElements.set(dados.totalElements);
         this.paginaAtual.set(dados.number);
       },
-      error: err => console.error('Erro ao carregar lançamentos', err)
+      error: (err) => console.error('Erro ao carregar lançamentos', err),
     });
   }
 
@@ -66,23 +70,33 @@ export class PessoasComponent {
   }
 
   excluirPessoa(codigo: number) {
-  if (confirm('Deseja realmente excluir esta pessoa?')) {
-    this.pessoasService.deletarPessoa(codigo).subscribe({
-      next: () => {
-        this.snackBar.open('Pessoa excluída com sucesso!', '', {
-          duration: 3000,
-          panelClass: ['snackbar-success']
-        });
-        this.pesquisar(); // recarrega a lista
-      },
-      error: (e) => {
-        this.snackBar.open(e.error.error, '', {
-          duration: 3000,
-          panelClass: ['snackbar-error']
+    const dialogRef = this.dialog.open(ConfirmacaoDialogComponent, {
+      width: '350px',
+      data: { mensagem: 'Deseja realmente excluir esta pessoa?' },
+    });
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        this.pessoasService.deletarPessoa(codigo).subscribe({
+          next: () => {
+            this.snackBar.open('Pessoa excluída com sucesso!', '', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['snackbar-success'],
+            });
+            this.pesquisar();
+          },
+          error: (e) => {
+            this.snackBar.open(`${e.error.error}!`, '', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['snackbar-error'],
+            });
+          },
         });
       }
     });
   }
-}
-
 }
